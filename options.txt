@@ -8,3 +8,6 @@ DAY_NUMBER= 	[int, -]			def: 0
 START_TIME= 	hr  min  sec			def: 0 0 0 
 SIM_LEN=	hr  min  sec			def: 0 0 1
 TIME_STEP=	hr  min  sec 			def: 0 0 0.5
+
+2) REACTION PARAMETERS
+TEMP= 		[float, 200 - 400 K]		def: 298.15

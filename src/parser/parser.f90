@@ -10,8 +10,8 @@ PROGRAM parser
   !See options.txt for simulation options
 
   !Variables
-  REAL(KIND=8), DIMENSION(0:6) :: options
-  CHARACTER(LEN=4), DIMENSION(0:6) :: opt_name
+  REAL(KIND=8), DIMENSION(0:7) :: options
+  CHARACTER(LEN=4), DIMENSION(0:7) :: opt_name
 
   !internal
   CHARACTER(LEN=20),DIMENSION(0:1) :: line
@@ -20,8 +20,8 @@ PROGRAM parser
   INTEGER :: i
 
   !defaults
-  options = [0.0,0.0,0.0,0.0,0.0,1.0,0.5]
-  opt_name = ['SUN ','LAT ','LON ','DNUM','TSTR','TLEN','TSTP']
+  options = [0.0,0.0,0.0,0.0,0.0,1.0,0.5,298.15]
+  opt_name = ['SUN ','LAT ','LON ','DNUM','TSTR','TLEN','TSTP','TEMP']
 
   WRITE(*,*) 
   WRITE(*,*) "parse called" 
@@ -48,15 +48,22 @@ PROGRAM parser
   options(5) = getTLEN(val1,val2,val3)
   READ(1,*) str, val1,val2,val3
   options(6) = getTSTP(val1,val2,val3)
+  READ(1,*) 
+  READ(1,*)
+  READ(1,*) str, val
+  options(7) = getTEMP(val)
   
   
   CLOSE (unit=1)
 
   !print parameters
+  WRITE(*,*)
   WRITE(*,*) "Paremeters"
   DO i=0,SIZE(options)-1
     WRITE(*,*) opt_name(i),":",options(i)
   END DO
+  WRITE(*,*) 
+  WRITE(*,*) "=============================="
 
   !Write to jobinfo file
   OPEN(unit=2,file='jobinfo',status='replace',access='sequential')
@@ -161,6 +168,20 @@ PROGRAM parser
     time = sc + time
     getTSTP = time
   END FUNCTION getTSTP
+!---------------------------------------------------------------------
+! Get temperatures 
+  REAL(KIND=8) FUNCTION getTEMP(val)
+    IMPLICIT NONE
+    REAL(KIND=8), INTENT(in) :: val 
+    REAL(KIND=8) :: temp
+    temp = 298.15
+    IF (val .LT. 200.0 .OR. val .GT. 400.0) THEN
+      WRITE(*,*) "WARNING- defaulting to TEMP= 298.15 K" 
+    ELSE
+      temp = val 
+    END IF
+    getTEMP = temp
+  END FUNCTION getTEMP
 
 
 END PROGRAM parser
