@@ -1,0 +1,14 @@
+QUANTUM YIELD DATA
+Species  bin_size
+                Wavelength      theta
+
+NO2	1
+		398		1.0
+		399		1.0
+		400		0.88
+		401		0.75
+		402		0.62
+		203		0.53
+		404		0.44
+		405		0.37
+		406		0.30

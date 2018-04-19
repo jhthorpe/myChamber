@@ -1,0 +1,3 @@
+PHOTOLYSIS REACTIONS
+	Rct1		Rct2		Prd1		Prd2	
+	NO2	+	hv	>	NO	+	O
