@@ -1,7 +1,7 @@
-           0 HO      
-           1 NO2     
-           2 HONO2   
-           3 X       
-           4 N2      
+           0 X       
+           1 N2      
+           2 HO      
+           3 NO2     
+           4 HONO2   
            5 O       
            6 NO      

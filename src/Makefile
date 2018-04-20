@@ -4,7 +4,7 @@ FFLAGS=-fcheck=bounds
 bindir:= ../bin
 
 progdirs:= parser
-modules:= gas/gas.f90 util/util.f90
+modules:= gas/gas.f90 util/util.f90 integral/integral.f90 pop/pop.f90
 
 .PHONY: all prog
 

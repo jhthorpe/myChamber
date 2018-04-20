@@ -198,4 +198,27 @@ MODULE util
   END FUNCTION file_numlines
 
 !---------------------------------------------------------------------
+! finds index of ID from list, -1 if not there
+!---------------------------------------------------------------------
+! WARNING - assume index from zero
+! Variables
+!       ID      :       char(8), ID of chemical
+!       ID_list :       1D int, list of chemical ID's
+
+  INTEGER FUNCTION ID2idx(ID,ID_list)
+    IMPLICIT NONE
+    CHARACTER(LEN=8), DIMENSION(0:), INTENT(IN) :: ID_list
+    CHARACTER(LEN=8), INTENT(IN) :: ID
+    INTEGER :: i,idx
+    idx = -1
+    DO i=0,SIZE(ID_list)-1
+      IF (ID_list(i) .EQ. ID) THEN
+        idx = i
+        EXIT
+      END IF
+    END DO
+    ID2idx = idx
+  END FUNCTION ID2idx
+
+!---------------------------------------------------------------------
 END MODULE util

@@ -6,7 +6,7 @@ MODULE gas
 
   CONTAINS
 !=====================================================================
-!                       SUBROUTINES 
+!                       SUBPROGRAMS
 !=====================================================================
 
 !---------------------------------------------------------------------
@@ -30,6 +30,7 @@ MODULE gas
 
     !internal
     CHARACTER(LEN=20) :: fname
+    CHARACTER(LEN=8) :: dummy
     INTEGER :: nlines,nrxn,nID,fID,mID,mrxn
     INTEGER :: i,j,k,l
 
@@ -38,7 +39,11 @@ MODULE gas
     ALLOCATE(gas_rxns(0:1,0:3))
     ALLOCATE(ID_list(0:3))
     gas_nrxn = 0
-    gas_nID = 0
+    dummy = 'X'
+    ID_list(0) = dummy
+    dummy = 'N2'
+    ID_list(1) = dummy
+    gas_nID = 2
     mrxn = 2
     mID = 4
 
@@ -106,7 +111,7 @@ MODULE gas
     DO i=0,3 
 
     !find ID and index of species 
-      idx = gas_ID2idx(ID(i),ID_list)
+      idx = ID2idx(ID(i),ID_list)
 
       !add to ID_list
       IF (idx .LT. 0) THEN
@@ -125,7 +130,7 @@ MODULE gas
     END DO
 
     !get ID number of h, and add coefs to gas_coef matrix
-    idx = gas_ID2idx(ID(4),ID_list)
+    idx = ID2idx(ID(4),ID_list)
     IF (idx .LT. 0) THEN
       IF (gas_nID + 1 .GT. mID) THEN
         CALL chr8_1Dgrow(ID_list)
@@ -141,27 +146,26 @@ MODULE gas
   END SUBROUTINE gas_readline
 
 !---------------------------------------------------------------------
-! finds index of ID from list, -1 if not there
+! Calculates rate of a reaction from general rate eq 
 !---------------------------------------------------------------------
 ! WARNING - assume index from zero
 ! Variables
-!	ID	:	char(8), ID of chemical
-!	ID_list	:	1D int, list of chemical ID's
+!	A		:	1D real(8), coefficients of the reaction 
+!	conc		:	1D real(8), concentrations of species	
+!	T		:	real(8), temperature in K
 
-  INTEGER FUNCTION gas_ID2idx(ID,ID_list)
+  REAL(KIND=8) FUNCTION gas_k(A,T,conc)
     IMPLICIT NONE
-    CHARACTER(LEN=8), DIMENSION(0:), INTENT(IN) :: ID_list
-    CHARACTER(LEN=8), INTENT(IN) :: ID
-    INTEGER :: i,idx
-    idx = -1
-    DO i=0,SIZE(ID_list)-1
-      IF (ID_list(i) .EQ. ID) THEN
-        idx = i
-        EXIT
-      END IF
-    END DO
-    gas_ID2idx = idx
-  END FUNCTION gas_ID2idx
+    REAL(KIND=8), DIMENSION(0:), INTENT(IN) :: A,conc
+    REAL(KIND=8), INTENT(IN) :: T
+    INTEGER :: idx
+    idx = NINT(A(7))
+    IF (idx .EQ. 0) THEN
+      gas_k = A(0)*DEXP(A(1)*T/A(2))*DEXP(A(3)/T)*(A(4)*T/A(5))**A(6)
+    ELSE
+      gas_k = A(0)*DEXP(A(1)*T/A(2))*DEXP(A(3)/T)*(A(4)*T/A(5))**A(6)*conc(idx)
+    END IF 
+  END FUNCTION gas_k
 
 !---------------------------------------------------------------------
 END MODULE gas
