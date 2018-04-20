@@ -115,16 +115,12 @@ MODULE gas
           CALL chr8_1Dgrow(ID_list)
           mID = mID*2
         END IF
-        !add to list
-        WRITE(*,*) ID(i),"not found in ID_list, adding"
         ID_list(gas_nID) = ID(i)
+        gas_rxns(i) = gas_nID
         gas_nID = gas_nID + 1
       ELSE
-        WRITE(*,*) ID(i),"found in list, skipping"
+        gas_rxns(i) = idx
       END IF
-
-      !Add species to gas_rxns matrix
-      gas_rxns(i) = idx
 
     END DO
 
@@ -135,13 +131,12 @@ MODULE gas
         CALL chr8_1Dgrow(ID_list)
         mID = mID*2
       END IF
-      WRITE(*,*) ID(4),"not found in list, adding"
       ID_list(gas_nID) = ID(4)
+      gas_coef = [a,b,c,d,e,f,g,gas_nID*1.0D0]
       gas_nID = gas_nID + 1
-    ELSE 
-      WRITE(*,*) ID(4), "found in list, skipping"
+    ELSE
+      gas_coef = [a,b,c,d,e,f,g,idx*1.0D0]
     END IF
-    gas_coef = [a,b,c,d,e,f,g,idx*1.0D0]
 
   END SUBROUTINE gas_readline
 
