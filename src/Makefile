@@ -4,11 +4,12 @@ FFLAGS=-fcheck=bounds
 bindir:= ../bin
 
 progdirs:= parser
+modules:= gas/gas.f90 util/util.f90
 
 .PHONY: all prog
 
 all: prog
-	$(FC) -o $(bindir)/myChamber $(FFLAGS) myChamber.f90
+	$(FC) -o $(bindir)/myChamber $(FFLAGS) myChamber.f90 $(modules)
 
 prog: 
 		@set -e; \

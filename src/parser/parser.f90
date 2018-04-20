@@ -18,6 +18,7 @@ PROGRAM parser
   CHARACTER(LEN=20) :: str
   REAL(KIND=8) :: val,val1,val2,val3
   INTEGER :: i
+  LOGICAL :: ex
 
   !defaults
   options = [0.0,0.0,0.0,0.0,0.0,1.0,0.5,298.15]
@@ -26,6 +27,14 @@ PROGRAM parser
   WRITE(*,*) 
   WRITE(*,*) "parse called" 
   WRITE(*,*) "Input Parameters"
+
+  !Check exists
+  INQUIRE(file='input.dat',EXIST=ex)
+  IF (.NOT. ex) THEN
+    WRITE(*,*) "@parser - cannot find input.dat"
+    CALL EXECUTE_COMMAND_LINE('touch error')
+    STOP
+  END IF
  
   !get parameters
   OPEN (unit=1,file="input.dat",status="old",access="sequential")

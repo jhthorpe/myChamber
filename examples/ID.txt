@@ -1,0 +1,7 @@
+           0 HO      
+           1 NO2     
+           2 HONO2   
+           3 X       
+           4 N2      
+           5 O       
+           6 NO      

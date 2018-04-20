@@ -60,11 +60,14 @@ MODULE gas
     END DO
     CLOSE(unit=fID)
 
-    WRITE(*,*) ID_list
     WRITE(*,*) 
+
+    !write to ID file
+    OPEN(unit=3,file='ID.txt',status='replace',access='sequential')
     DO i=0,gas_nID-1
-      WRITE(*,*) i,ID_list(i)
+      WRITE(3,*) i,ID_list(i)
     END DO
+    CLOSE(unit=3,status='keep')
 
   END SUBROUTINE gas_read
     
