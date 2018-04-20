@@ -1,7 +1,5 @@
-
-        	Rct1            Rct2            Rct3            Rct4            a * exp(b*T/c) * exp(d/T) * (e*T/f)^g * [h]
-myChamber	HO	+	NO2 	>	HONO2	+	X	:	a= 3.2E-30   b= 0.0  c= 1.0  d= 0.0  e= 1.0  f= 300.0  g= -4.5  h='N2'  	
-IUPAC		HO 	+ 	NO2 + M > 	HONO2 	+ 	M 	@ 	3.2x10^-30 * (T/300)^-4.5 * [N2]
-
-
+GAS PHASE KINETICS DATA
+        	Rct1            Rct2            Prd1            Prd2            a * exp(b*T/c) * exp(d/T) * (e*T/f)^g * [h]
+		HO	+	NO2 	>	HONO2	+	X	:	a= 3.2E-30  b= 0.0  c= 1.0  d= 0.0  e= 1.0  f= 300.0  g= -4.5  h= 'N2'  	
+		O	+	NO	>	NO2	+	X	:	a= 1.0E-31  b= 0.0  c= 1.0  d= 0.0  e= 1.0  f= 300.0  g= -1.6  h= 'N2'
 
