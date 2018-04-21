@@ -40,15 +40,19 @@ MODULE gas
     !Initialize data
     ALLOCATE(gas_coef(0:1,0:7))
     ALLOCATE(gas_rxns(0:1,0:5))
-    ALLOCATE(ID_list(0:3))
+    ALLOCATE(ID_list(0:7))
     gas_nrxn = 0
     dummy = 'X'
     ID_list(0) = dummy
     dummy = 'N2'
     ID_list(1) = dummy
-    gas_nID = 2
+    dummy = 'M'
+    ID_list(2) = dummy
+    dummy = 'hv'
+    ID_list(3) = dummy
+    gas_nID = 4
     mrxn = 2
-    mID = 4
+    mID = 8
 
     !Read gas phase data
     fname = 'gas.txt'

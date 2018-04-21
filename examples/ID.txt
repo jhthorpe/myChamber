@@ -1,8 +1,13 @@
            0 X       
            1 N2      
-           2 HO      
-           3 NO2     
-           4 M       
-           5 HONO2   
-           6 O       
-           7 NO      
+           2 M       
+           3 hv      
+           4 HO      
+           5 NO2     
+           6 HONO2   
+           7 O       
+           8 NO      
+           9 O3      
+          10 O1D     
+          11 O2      
+          12 O3P     
