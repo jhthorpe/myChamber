@@ -97,7 +97,9 @@ MODULE photo
     WRITE(*,*) "photolysis ID appended to ID.txt"
 
     !get QY,CS,and AF data
-    CALL photo_getQY(ID_list,photo_rxns,photo_nrxn,photo_QY)
+    fname = 'QY.txt'
+    CALL photo_getdata(ID_list,photo_rxns,photo_nrxn,photo_QY,fname)
+
 
   END SUBROUTINE photo_read
 
@@ -145,7 +147,7 @@ MODULE photo
   END SUBROUTINE photo_readline
 
 !---------------------------------------------------------------------
-! Read in Quantum Yield Data
+! Read in Data from designated file 
 !---------------------------------------------------------------------
 ! Values
 !	ID_list		:	1D char(8), list of ID's
@@ -153,42 +155,45 @@ MODULE photo
 !	photo_nrxn	:	int, number of photolysis reactions 
 !	photo_QY	:	2D real(8), Quantum Yield matrix
 
-  SUBROUTINE photo_getQY(ID_list,photo_rxns,photo_nrxn,photo_QY)
+  SUBROUTINE photo_getdata(ID_list,photo_rxns,photo_nrxn,photo_data,fname)
     IMPLICIT NONE
     !inout
-    REAL(KIND=8), DIMENSION(0:,0:),INTENT(INOUT) :: photo_QY
+    REAL(KIND=8), DIMENSION(0:,0:),INTENT(INOUT) :: photo_data
     CHARACTER(LEN=8), DIMENSION(0:), INTENT(IN) :: ID_list
     INTEGER, DIMENSION(0:,0:), INTENT(IN) :: photo_rxns
+    CHARACTER(LEN=20),INTENT(IN) :: fname
     INTEGER, INTENT(IN) :: photo_nrxn
     !internal
-    CHARACTER(LEN=20) :: fname
-    INTEGER :: fID,val
+    INTEGER :: fID,val,io
     INTEGER :: i,j,k
 
-    WRITE(*,*) "Reading data from QY.txt"
-  
-    fname = 'QY.txt'
+    WRITE(*,*) "Reading data from ", fname
     fID = 1
     
     !go through each reaction
     OPEN(unit=fID,file=fname,status='old',access='sequential',action='READ')
     DO i=0,photo_nrxn-1
+
+      !goto start of reaction
       val = photo_goto(fID,ID_list,photo_rxns(i,:))
       IF (val .LT. 0) THEN
-        WRITE(*,*) "failed to find this reaction in QY.txt"
+        WRITE(*,*) "failed to find this reaction in ",fname
         WRITE(*,*) photo_rxns(i,:)
         CLOSE(unit=fID)
         STOP
       END IF
-      
+
+      !get data
+      CALL photo_filldata(fID,photo_data(i,:))
+
       REWIND(unit=fID)   
     END DO 
     CLOSE(unit=fID)
     
-  END SUBROUTINE photo_getQY
+  END SUBROUTINE photo_getdata
 
 !---------------------------------------------------------------------
-! Goto start of reaction in file
+! Goto start of reaction in given file
 !---------------------------------------------------------------------
 ! Values
 !	fID		:	int, unit id of file
@@ -219,10 +224,10 @@ MODULE photo
       pID(i) = ID_list(photo_rxns(i))
     END DO 
 
-    !goto line 
+    !search for first match
     DO WHILE(.NOT. found)
       READ(fID,*,iostat=io) str
-      IF (io .NE. 0) STOP
+      IF (io .NE. 0) RETURN
   
       !we have a potential match, with correct format
       IF (str .EQ. pID(0)) THEN
@@ -248,5 +253,33 @@ MODULE photo
   END FUNCTION photo_goto
 
 !---------------------------------------------------------------------
+!  Fill in photo data from designated file until hit io fail
+!---------------------------------------------------------------------
+! Values
+!	fID		:	int, unit number of file
+!	photo_data	:	1D real(8), data to fill
 
+  SUBROUTINE photo_filldata(fID,photo_data)
+    IMPLICIT NONE
+    !inout
+    REAL(KIND=8),DIMENSION(0:),INTENT(INOUT) :: photo_data
+    INTEGER, INTENT(IN) :: fID
+    !internal
+    REAL(KIND=8) :: peak,width,qy
+    INTEGER :: io
+    INTEGER :: i,j,k
+    io = 0
+    DO WHILE (io .EQ. 0) 
+      READ(fID,*,iostat=io) peak,width,qy
+      !if good, fill in data
+      IF (io .EQ. 0) THEN
+        DO i=NINT(peak)-NINT(width),NINT(peak)+NINT(width)
+          photo_data(i) = qy
+        END DO 
+      END IF 
+    END DO
+    BACKSPACE(unit=fID)
+  END SUBROUTINE photo_filldata
+
+!---------------------------------------------------------------------
 END MODULE photo
