@@ -23,6 +23,9 @@ MODULE photo
 ! NOTES
 !    Here, I will use 1 nm as the integer values between 0 and 1000 nm wavelengths
 !    There are more efficient ways to do this, but I am lazy 
+!
+!    Note that actinic flux is currently considered a constant, this should be fixed
+
   SUBROUTINE photo_read(ID_list,photo_rxns,photo_QY,photo_CS,photo_AF,photo_nrxn,nID,photo_ID)
     IMPLICIT NONE
     !inout
@@ -45,7 +48,7 @@ MODULE photo
     ALLOCATE(photo_rxns(0:1,0:5))
     ALLOCATE(photo_QY(0:1,0:1000))
     ALLOCATE(photo_CS(0:1,0:1000))
-    ALLOCATE(photo_AF(0:1,0:1000))
+    ALLOCATE(photo_AF(0:0,0:1000))
     mID = SIZE(ID_list)
     mrxn = 2
     photo_nrxn = 0
@@ -80,13 +83,17 @@ MODULE photo
       IF (photo_nrxn .GT. mrxn) THEN
         CALL real8_2Dgrow1(photo_QY)
         CALL real8_2Dgrow1(photo_CS)
-        CALL real8_2Dgrow1(photo_AF)
         CALL int4_2Dgrow1(photo_rxns)
         mrxn = mrxn*2
       END IF
       CALL photo_readline(fID,ID_list,photo_rxns(i,:),nID,mID)
     END DO
     CLOSE(unit=fID)
+
+    !zero arrays
+    CALL real8_2Dzero(photo_QY)
+    CALL real8_2Dzero(photo_CS)
+    CALL real8_2Dzero(photo_AF)
 
     !append data to ID.txt
     OPEN(unit=1,file='ID.txt',access='APPEND',status='old')
@@ -96,10 +103,16 @@ MODULE photo
     CLOSE(unit=1)
     WRITE(*,*) "photolysis ID appended to ID.txt"
 
-    !get QY,CS,and AF data
+    !get QY,CS for each reaction
     fname = 'QY.txt'
     CALL photo_getdata(ID_list,photo_rxns,photo_nrxn,photo_QY,fname)
+    fname = 'CS.txt'
+    CALL photo_getdata(ID_list,photo_rxns,photo_nrxn,photo_CS,fname)
+    !get AF for the system
+    fname = 'AF.txt'
+    CALL photo_getAF(photo_AF,fname)
 
+    WRITE(*,*) 
 
   END SUBROUTINE photo_read
 
@@ -265,21 +278,59 @@ MODULE photo
     REAL(KIND=8),DIMENSION(0:),INTENT(INOUT) :: photo_data
     INTEGER, INTENT(IN) :: fID
     !internal
-    REAL(KIND=8) :: peak,width,qy
+    REAL(KIND=8) :: peak,width,val,fact
     INTEGER :: io
     INTEGER :: i,j,k
     io = 0
+    !read factor
+    READ(fID,*,iostat=io) fact
+    IF (io .NE. 0) STOP "need factor in photolysis data"
     DO WHILE (io .EQ. 0) 
-      READ(fID,*,iostat=io) peak,width,qy
+      READ(fID,*,iostat=io) peak,width,val
       !if good, fill in data
       IF (io .EQ. 0) THEN
         DO i=NINT(peak)-NINT(width),NINT(peak)+NINT(width)
-          photo_data(i) = qy
+          photo_data(i) = val*fact
         END DO 
+      ELSE
+        RETURN
       END IF 
     END DO
     BACKSPACE(unit=fID)
   END SUBROUTINE photo_filldata
+
+!---------------------------------------------------------------------
+! Get the Actinic Flux for our system
+!    CALL photo_getAF(photo_AF,fname)
+!---------------------------------------------------------------------
+! WARNING - currently considereing only constant AF
+! Values
+!	photo_AF	:	2D real(8), actinic flux per timestep
+!	fname		:	char(20), filename
+
+  SUBROUTINE photo_getAF(photo_AF,fname)
+    IMPLICIT NONE
+    !inout
+    REAL(KIND=8),DIMENSION(0:,0:), INTENT(INOUT) :: photo_AF
+    CHARACTER(LEN=20), INTENT(IN) :: fname
+    !internal
+    INTEGER :: fID
+    INTEGER :: i
+    fID = 1
+    WRITE(*,*) "Reading data from ",fname
+    OPEN(unit=fID,file=fname,access='sequential',status='old')
+    READ(fID,*) 
+    READ(fID,*) 
+    READ(fID,*) 
+    READ(fID,*) 
+    CALL photo_filldata(fID,photo_AF(0,:)) 
+    CLOSE(unit=fID)
+
+    WRITE(*,*) "testing AF"
+    DO i=0,1000
+      WRITE(*,*) i,photo_AF(0,i)
+    END DO
+  END SUBROUTINE photo_getAF
 
 !---------------------------------------------------------------------
 END MODULE photo

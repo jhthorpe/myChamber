@@ -171,6 +171,21 @@ MODULE util
   END SUBROUTINE real8_2Dgrow1
 
 !---------------------------------------------------------------------
+! zero a 2D array 
+!---------------------------------------------------------------------
+! Variables
+!	A	:	2D real(8), array to be zeroed
+
+  SUBROUTINE real8_2Dzero(A)
+    IMPLICIT NONE
+    REAL(KIND=8), DIMENSION(0:,0:), INTENT(INOUT) :: A  
+    INTEGER :: i,j
+    DO j=0,SIZE(A(0,:))-1
+      A(:,j) = (/ (0.0D0, i=0, SIZE(A(:,0))-1 ) /)
+    END DO
+  END SUBROUTINE real8_2Dzero
+
+!---------------------------------------------------------------------
 ! Get number of lines in a file
 !---------------------------------------------------------------------
 ! Variables
