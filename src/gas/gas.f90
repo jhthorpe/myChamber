@@ -57,7 +57,7 @@ MODULE gas
     OPEN(unit=fID,file=fname,status='old',access='sequential')
     READ(fID,*)
     READ(fID,*)
-    DO i=0,nlines-4
+    DO i=0,nlines-3
       gas_nrxn = gas_nrxn + 1
       IF (gas_nrxn .GT. mrxn) THEN
         CALL int4_2Dgrow1(gas_rxns)
