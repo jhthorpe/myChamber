@@ -19,24 +19,27 @@ MODULE gas
 !	gas_nrxn	:	int, number of gas phase reactions
 !	gas_nID		:	int, number of gas phase species
 
-  SUBROUTINE gas_read(ID_list,gas_rxns,gas_coef,gas_nrxn,gas_nID)
+  SUBROUTINE gas_read(ID_list,gas_rxns,gas_coef,gas_nrxn,nID)
     IMPLICIT NONE
 
     !inout
     INTEGER(KIND=4), ALLOCATABLE, DIMENSION(:,:), INTENT(INOUT) :: gas_rxns
     CHARACTER(LEN=8), ALLOCATABLE, DIMENSION(:), INTENT(INOUT) :: ID_list
     REAL(KIND=8), ALLOCATABLE, DIMENSION(:,:), INTENT(INOUT) :: gas_coef
-    INTEGER, INTENT(INOUT) :: gas_nrxn,gas_nID
+    INTEGER, INTENT(INOUT) :: gas_nrxn,nID
 
     !internal
     CHARACTER(LEN=20) :: fname
     CHARACTER(LEN=8) :: dummy
-    INTEGER :: nlines,nrxn,nID,fID,mID,mrxn
+    INTEGER :: nlines,nrxn,fID,mID,mrxn,gas_nID
     INTEGER :: i,j,k,l
+
+    WRITE(*,*) 
+    WRITE(*,*) "Reading gas phase data..."
 
     !Initialize data
     ALLOCATE(gas_coef(0:1,0:7))
-    ALLOCATE(gas_rxns(0:1,0:3))
+    ALLOCATE(gas_rxns(0:1,0:5))
     ALLOCATE(ID_list(0:3))
     gas_nrxn = 0
     dummy = 'X'
@@ -64,15 +67,16 @@ MODULE gas
       CALL gas_readline(fID,ID_list,gas_rxns(i,:),gas_coef(i,:),gas_nID,mID)   
     END DO
     CLOSE(unit=fID)
-
-    WRITE(*,*) 
+    nID = nID + gas_nID
 
     !write to ID file
     OPEN(unit=3,file='ID.txt',status='replace',access='sequential')
-    DO i=0,gas_nID-1
+    DO i=0,nID-1
       WRITE(3,*) i,ID_list(i)
     END DO
     CLOSE(unit=3,status='keep')
+
+    WRITE(*,*) "ID's stored in ID.txt"
 
   END SUBROUTINE gas_read
     
@@ -98,17 +102,17 @@ MODULE gas
     INTEGER, INTENT(IN) :: fID
     
     !internal
-    CHARACTER(LEN=8),DIMENSION(0:4) :: ID
+    CHARACTER(LEN=8),DIMENSION(0:6) :: ID
     CHARACTER(LEN=2) :: dum2
     CHARACTER(LEN=1) :: dum1
     REAL(KIND=8) :: a,b,c,d,e,f,g,h
     INTEGER :: idx,i
 
     !read in variables
-    READ(fID,*) ID(0),dum1,ID(1),dum1,ID(2),dum1,ID(3), &
-                dum1,dum2,a,dum2,b,dum2,c,dum2,d,dum2,e,dum2,f,dum2,g,dum2,ID(4)
+    READ(fID,*) ID(0),dum1,ID(1),dum1,ID(2),dum1,ID(3),dum1,ID(4),dum1,ID(5), &
+                dum1,dum2,a,dum2,b,dum2,c,dum2,d,dum2,e,dum2,f,dum2,g,dum2,ID(6)
 
-    DO i=0,3 
+    DO i=0,5 
 
     !find ID and index of species 
       idx = ID2idx(ID(i),ID_list)
@@ -130,7 +134,7 @@ MODULE gas
     END DO
 
     !get ID number of h, and add coefs to gas_coef matrix
-    idx = ID2idx(ID(4),ID_list)
+    idx = ID2idx(ID(6),ID_list)
     IF (idx .LT. 0) THEN
       IF (gas_nID + 1 .GT. mID) THEN
         CALL chr8_1Dgrow(ID_list)

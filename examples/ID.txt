@@ -2,6 +2,7 @@
            1 N2      
            2 HO      
            3 NO2     
-           4 HONO2   
-           5 O       
-           6 NO      
+           4 M       
+           5 HONO2   
+           6 O       
+           7 NO      
