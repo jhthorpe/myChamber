@@ -91,6 +91,10 @@ MODULE integral
     END DO
 
     !go through photolysis reactions
+    DO i=0,photo_nrxn-1
+      CALL photo_react(tstep,ID_list,conc,nconc,photo_rxns(i,:),photo_QY(i,:),&
+                       photo_CS(i,:),photo_AF(i,:))
+    END DO
 
     conc = nconc
 

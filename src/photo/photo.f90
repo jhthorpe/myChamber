@@ -301,7 +301,6 @@ MODULE photo
 
 !---------------------------------------------------------------------
 ! Get the Actinic Flux for our system
-!    CALL photo_getAF(photo_AF,fname)
 !---------------------------------------------------------------------
 ! WARNING - currently considereing only constant AF
 ! Values
@@ -327,5 +326,72 @@ MODULE photo
     CLOSE(unit=fID)
   END SUBROUTINE photo_getAF
 
+!---------------------------------------------------------------------
+! Perform one step of photolysis reactions 
+!---------------------------------------------------------------------
+! WARNING - currently considereing only constant AF
+
+  SUBROUTINE photo_react(tstep,ID_list,conc,nconc,photo_rxns,photo_QY,&
+                         photo_CS,photo_AF)
+    IMPLICIT NONE
+    !inout
+    CHARACTER(LEN=8),DIMENSION(0:), INTENT(IN) :: ID_list
+    REAL(KIND=8), DIMENSION(0:), INTENT(INOUT) :: conc,nconc
+    REAL(KIND=8), DIMENSION(0:), INTENT(IN) :: photo_QY,photo_CS,photo_AF
+    INTEGER, DIMENSION(0:), INTENT(IN) :: photo_rxns
+    REAL(KIND=8), INTENT(IN) :: tstep
+    !internal
+    REAL(KIND=8) :: rate,coef
+    INTEGER :: i,j,k
+
+    !k
+    coef = photo_k(photo_QY,photo_CS,photo_AF)
+
+    !rate
+    DO i=0,2
+      IF (photo_rxns(i) .GT. 3 .OR. photo_rxns(i) .EQ. 1) rate = rate*conc(photo_rxns(i))
+    END DO
+
+     !reactants
+     DO i=0,2
+       IF (photo_rxns(i) .GT. 3 .OR. photo_rxns(i) .EQ. 1) THEN
+         nconc(photo_rxns(i)) = conc(photo_rxns(i)) - rate*tstep
+       END IF
+     END DO
+     !products
+     DO i=3,5
+       IF (photo_rxns(i) .GT. 3 .OR. photo_rxns(i) .EQ. 1) THEN
+         nconc(photo_rxns(i)) = conc(photo_rxns(i)) + rate*tstep
+       END IF
+     END DO
+ 
+     !check for zeros
+     DO i=0,5
+       IF (nconc(photo_rxns(i)) .LT. 0.0D0) THEN
+         WRITE(*,*) "WARNING - ", ID_list(photo_rxns(i)), " has a concentration of", nconc(photo_rxns(i)), ": zeroing"
+         nconc(photo_rxns(i)) = 0.0D0
+       END IF
+     END DO
+
+  END SUBROUTINE photo_react
+ 
+!---------------------------------------------------------------------
+! Get photolysis rate constant 
+!---------------------------------------------------------------------
+! WARNING - currently considereing only constant AF
+! WARNING - currently assuming QY,CS,and AF are equally indexed
+  REAL(KIND=8) FUNCTION photo_k(QY,CS,AF)
+    IMPLICIT NONE
+    !inout
+    REAL(KIND=8),DIMENSION(0:),INTENT(IN) :: QY,CS,AF
+    !internal
+    REAL(KIND=8) :: val
+    INTEGER :: i,j,k
+    val = 0.0D0
+    DO i=0,SIZE(QY)-1 
+      val = val + QY(i)*CS(i)*AF(i)
+    END DO
+  END FUNCTION photo_k
+  
 !---------------------------------------------------------------------
 END MODULE photo

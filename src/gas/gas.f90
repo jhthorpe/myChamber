@@ -209,11 +209,15 @@ MODULE gas
 
     !reactants
     DO i=0,2
-      nconc(gas_rxns(i)) = conc(gas_rxns(i)) - rate*tstep
+      IF (gas_rxns(i) .GT. 3 .OR. gas_rxns(i) .EQ. 1) THEN
+        nconc(gas_rxns(i)) = conc(gas_rxns(i)) - rate*tstep
+      END IF
     END DO
     !products
     DO i=3,5
-      nconc(gas_rxns(i)) = conc(gas_rxns(i)) + rate*tstep
+      IF (gas_rxns(i) .GT. 3 .OR. gas_rxns(i) .EQ. 1) THEN
+        nconc(gas_rxns(i)) = conc(gas_rxns(i)) + rate*tstep
+      END IF
     END DO
 
     !check for zeros
