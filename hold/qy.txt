@@ -4,11 +4,13 @@ QUANTUM YIELD DATA
 	nm	+/-	QY
 
 	O3	hv	X	O1D	O2	X
-	1.0D0
-	200	50	0.9
-	
+
+
 	O3	hv	X	O3P	O2	X
-	1.0D0
-	330	50	0.9
-	455	29	0.2
-	492	0	100
+
+	O2	hv	X	O3P	O3P	X
+	209	33	1.0	
+
+	O2	hv	X	O3P	O1D	X	
+	157	18	1.0
+	121.6	0	0.44

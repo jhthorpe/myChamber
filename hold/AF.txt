@@ -3,4 +3,4 @@ ACTINIC FLUX DATA
 	nm	+/-	AF(cm^-2 * s^-1)
 
 	1.0D14
-	300	100	0.14	
+	000	000	0.00

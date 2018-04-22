@@ -2,3 +2,5 @@ PHOTOLYSIS REACTIONS
 	Rct1		Rct2		Rct3		Prd1		Prd2		Prd3
 	O3	+	hv	+	X	>	O1D	+	O2	+	X
 	O3	+	hv	+	X	>	O3P	+	O2	+	X
+	O2	+	hv	+	X	>	O3P	+	O3P	+	X
+	O2	+	hv	+	X	>	O3P	+	O1D	+	X	

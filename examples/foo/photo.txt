@@ -1,2 +1,0 @@
-PHOTOLYSIS REACTIONS
-	Rct1		Rct2		Rct3		Prd1		Prd2		Prd3

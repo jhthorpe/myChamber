@@ -1,6 +1,0 @@
-ACTINIC FLUX DATA
-	factor
-	nm	+/-	AF(cm^-2 * s^-1)
-
-	1.0D14
-	300	100	0.14	
