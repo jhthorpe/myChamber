@@ -325,11 +325,6 @@ MODULE photo
     READ(fID,*) 
     CALL photo_filldata(fID,photo_AF(0,:)) 
     CLOSE(unit=fID)
-
-    WRITE(*,*) "testing AF"
-    DO i=0,1000
-      WRITE(*,*) i,photo_AF(0,i)
-    END DO
   END SUBROUTINE photo_getAF
 
 !---------------------------------------------------------------------

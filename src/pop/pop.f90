@@ -30,7 +30,7 @@ MODULE pop
     INTEGER :: i,nline,idx
     LOGICAL :: ex
 
-    fname='pop0.txt'
+    fname='init.txt'
 
     !read in ppb 
     INQUIRE(file=fname,EXIST=ex)

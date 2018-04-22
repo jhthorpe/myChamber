@@ -154,26 +154,76 @@ MODULE gas
   END SUBROUTINE gas_readline
 
 !---------------------------------------------------------------------
-! Calculates rate of a reaction from general rate eq 
+! Calculates rate coefficient of a reaction from general rate eq 
 !---------------------------------------------------------------------
-! WARNING - assume index from zero
 ! Variables
 !	A		:	1D real(8), coefficients of the reaction 
-!	conc		:	1D real(8), concentrations of species	
+!	conc		:	real(8), concentrations of collision source	
 !	T		:	real(8), temperature in K
 
   REAL(KIND=8) FUNCTION gas_k(A,T,conc)
     IMPLICIT NONE
-    REAL(KIND=8), DIMENSION(0:), INTENT(IN) :: A,conc
-    REAL(KIND=8), INTENT(IN) :: T
+    REAL(KIND=8), DIMENSION(0:), INTENT(IN) :: A
+    REAL(KIND=8), INTENT(IN) :: T,conc
     INTEGER :: idx
     idx = NINT(A(7))
     IF (idx .EQ. 0) THEN
       gas_k = A(0)*DEXP(A(1)*T/A(2))*DEXP(A(3)/T)*(A(4)*T/A(5))**A(6)
     ELSE
-      gas_k = A(0)*DEXP(A(1)*T/A(2))*DEXP(A(3)/T)*(A(4)*T/A(5))**A(6)*conc(idx)
+      gas_k = A(0)*DEXP(A(1)*T/A(2))*DEXP(A(3)/T)*(A(4)*T/A(5))**A(6)*conc
     END IF 
   END FUNCTION gas_k
 
+!---------------------------------------------------------------------
+! Calculates new concentrations  
+!---------------------------------------------------------------------
+! Variables
+!	tstep		:	real(8), timestep
+!	ID_list		:	1D chr(8), list of species
+!	conc		:	1D real(8), list of concentrations in mol/cm3
+!	nconc		:	1D real(8), list of concentrations post reaction
+! 	gas_rxns	:	1D int, list of reaction ID
+!	gas_coef	:	1D real(8), list of coefs for general rate eq 
+!	T		:	real(8), temperature in K
+
+  SUBROUTINE gas_react(tstep,ID_list,conc,nconc,gas_rxns,gas_coef,T)
+    IMPLICIT NONE
+    !inout
+    CHARACTER(LEN=8),DIMENSION(0:), INTENT(IN) :: ID_list
+    REAL(KIND=8), DIMENSION(0:), INTENT(INOUT) :: conc,nconc
+    REAL(KIND=8), DIMENSION(0:), INTENT(IN) :: gas_coef
+    INTEGER, DIMENSION(0:), INTENT(IN) :: gas_rxns
+    REAL(KIND=8), INTENT(IN) :: tstep,T
+    !internal
+    REAL(KIND=8) :: rate,coef
+    INTEGER :: i,j,k
+
+    !get rate coef
+    coef = gas_k(gas_coef,T,conc(NINT(gas_coef(7))))
+
+    !get rate
+    rate = coef
+    DO i=0,2
+      IF (gas_rxns(i) .NE. 0 .AND. gas_rxns(i) .NE. 2) rate = rate*conc(gas_rxns(i)) 
+    END DO 
+
+    !reactants
+    DO i=0,2
+      nconc(gas_rxns(i)) = conc(gas_rxns(i)) - rate*tstep
+    END DO
+    !products
+    DO i=3,5
+      nconc(gas_rxns(i)) = conc(gas_rxns(i)) + rate*tstep
+    END DO
+
+    !check for zeros
+    DO i=0,5
+      IF (nconc(gas_rxns(i)) .LT. 0.0D0) THEN
+        WRITE(*,*) "WARNING - ", ID_list(gas_rxns(i)), " has a concentration of", nconc(gas_rxns(i)), ": zeroing"
+        nconc(gas_rxns(i)) = 0.0D0
+      END IF
+    END DO
+    
+  END SUBROUTINE gas_react
 !---------------------------------------------------------------------
 END MODULE gas
