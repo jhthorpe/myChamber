@@ -4,3 +4,9 @@ PHOTOLYSIS REACTIONS
 	O3	+	hv	+	X	>	O3P	+	O2	+	X
 	O2	+	hv	+	X	>	O3P	+	O3P	+	X
 	O2	+	hv	+	X	>	O3P	+	O1D	+	X	
+	HONO	+	hv	+	X	>	HO	+	NO	+	X
+	HONO2	+	hv	+	X	>	HO	+	NO2	+	X
+	HONO2	+	hv	+	X	>	HONO	+	O1D	+	X
+	HONO2	+	hv	+	X	>	HONO	+	O3P	+	X
+	NO2	+	hv	+	X	>	NO	+	O3P	+	X
+	NO2	+	hv	+	X	>	NO	+	O1D	+	X
