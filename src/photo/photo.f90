@@ -290,7 +290,7 @@ MODULE photo
       !if good, fill in data
       IF (io .EQ. 0) THEN
         DO i=NINT(peak)-NINT(width),NINT(peak)+NINT(width)
-          photo_data(i) = val*fact
+          photo_data(i) = val/fact
         END DO 
       ELSE
         RETURN
