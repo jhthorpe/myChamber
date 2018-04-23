@@ -223,8 +223,8 @@ MODULE gas
     !check for zeros
     DO i=0,5
       IF (nconc(gas_rxns(i)) .LT. 0.0D0) THEN
-        WRITE(*,*) "WARNING - ", ID_list(gas_rxns(i)), " has a concentration of", nconc(gas_rxns(i)), ": zeroing"
-        nconc(gas_rxns(i)) = 0.0D0
+!        WRITE(*,*) "WARNING - ", ID_list(gas_rxns(i)), " has a concentration of", nconc(gas_rxns(i)), ": zeroing"
+!       STOP 
       END IF
     END DO
     

@@ -1,5 +1,5 @@
 FC=gfortran
-FFLAGS=-fcheck=bounds
+FFLAGS=-fcheck=bounds -O2
 
 bindir:= ../bin
 

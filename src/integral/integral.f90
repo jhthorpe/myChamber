@@ -57,6 +57,14 @@ MODULE integral
       WRITE(fID,*) time, conc(4:)/2.46D10
       CALL integral_step(tstep,ID_list,nID,photo_ID,conc,nconc,gas_rxns,gas_nrxn,gas_coef,&
                          photo_rxns,photo_nrxn,photo_QY,photo_CS,photo_AF,T,options)
+      !check concentrations
+      DO i=0,nID-1
+        IF (conc(i) .LT. 0) THEN
+          WRITE(*,*) "WARNING - at time", time," negative concentration!"
+          WRITE(*,*) "		",ID_list(i)," : ",conc(i)
+          STOP
+        END IF
+      END DO
       time = time + tstep
     END DO
 

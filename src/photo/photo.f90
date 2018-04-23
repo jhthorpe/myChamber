@@ -369,8 +369,8 @@ MODULE photo
      !check for zeros
      DO i=0,5
        IF (nconc(photo_rxns(i)) .LT. 0.0D0) THEN
-         WRITE(*,*) "WARNING - ", ID_list(photo_rxns(i)), " has a concentration of", nconc(photo_rxns(i)), ": zeroing"
-         nconc(photo_rxns(i)) = 0.0D0
+!         WRITE(*,*) "WARNING - ", ID_list(photo_rxns(i)), " has a concentration of", nconc(photo_rxns(i)), ": zeroing"
+!         nconc(photo_rxns(i)) = 0.0D0
        END IF
      END DO
 
