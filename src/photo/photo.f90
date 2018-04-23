@@ -346,6 +346,7 @@ MODULE photo
 
     !k
     coef = photo_k(photo_QY,photo_CS,photo_AF)
+    rate = coef
 
     !rate
     DO i=0,2
@@ -391,6 +392,7 @@ MODULE photo
     DO i=0,SIZE(QY)-1 
       val = val + QY(i)*CS(i)*AF(i)
     END DO
+    photo_k = val
   END FUNCTION photo_k
   
 !---------------------------------------------------------------------

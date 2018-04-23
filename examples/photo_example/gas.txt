@@ -1,0 +1,2 @@
+GAS PHASE KINETICS DATA
+        	Rct1            Rct2    	Rct3		Prd1		Prd2		Prd3            a * exp(b*T/c) * exp(d/T) * (e*T/f)^g * [h]

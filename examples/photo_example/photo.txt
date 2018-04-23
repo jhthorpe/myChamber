@@ -1,0 +1,3 @@
+PHOTOLYSIS REACTIONS
+	Rct1		Rct2		Rct3		Prd1		Prd2		Prd3
+	O3	+	hv	+	X	>	O3P	+	O2	+	X
