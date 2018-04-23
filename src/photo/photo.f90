@@ -356,23 +356,23 @@ MODULE photo
      !reactants
      DO i=0,2
        IF (photo_rxns(i) .GT. 3 .OR. photo_rxns(i) .EQ. 1) THEN
-         nconc(photo_rxns(i)) = conc(photo_rxns(i)) - rate*tstep
+         nconc(photo_rxns(i)) = nconc(photo_rxns(i)) - rate*tstep
        END IF
      END DO
      !products
      DO i=3,5
        IF (photo_rxns(i) .GT. 3 .OR. photo_rxns(i) .EQ. 1) THEN
-         nconc(photo_rxns(i)) = conc(photo_rxns(i)) + rate*tstep
+         nconc(photo_rxns(i)) = nconc(photo_rxns(i)) + rate*tstep
        END IF
      END DO
  
      !check for zeros
-     DO i=0,5
-       IF (nconc(photo_rxns(i)) .LT. 0.0D0) THEN
+!     DO i=0,5
+!       IF (nconc(photo_rxns(i)) .LT. 0.0D0) THEN
 !         WRITE(*,*) "WARNING - ", ID_list(photo_rxns(i)), " has a concentration of", nconc(photo_rxns(i)), ": zeroing"
 !         nconc(photo_rxns(i)) = 0.0D0
-       END IF
-     END DO
+!       END IF
+!     END DO
 
   END SUBROUTINE photo_react
  

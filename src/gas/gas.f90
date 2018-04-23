@@ -210,23 +210,23 @@ MODULE gas
     !reactants
     DO i=0,2
       IF (gas_rxns(i) .GT. 3 .OR. gas_rxns(i) .EQ. 1) THEN
-        nconc(gas_rxns(i)) = conc(gas_rxns(i)) - rate*tstep
+        nconc(gas_rxns(i)) = nconc(gas_rxns(i)) - rate*tstep
       END IF
     END DO
     !products
     DO i=3,5
       IF (gas_rxns(i) .GT. 3 .OR. gas_rxns(i) .EQ. 1) THEN
-        nconc(gas_rxns(i)) = conc(gas_rxns(i)) + rate*tstep
+        nconc(gas_rxns(i)) = nconc(gas_rxns(i)) + rate*tstep
       END IF
     END DO
 
     !check for zeros
-    DO i=0,5
-      IF (nconc(gas_rxns(i)) .LT. 0.0D0) THEN
+!   DO i=0,5
+!      IF (nconc(gas_rxns(i)) .LT. 0.0D0) THEN
 !        WRITE(*,*) "WARNING - ", ID_list(gas_rxns(i)), " has a concentration of", nconc(gas_rxns(i)), ": zeroing"
 !       STOP 
-      END IF
-    END DO
+!      END IF
+!    END DO
     
   END SUBROUTINE gas_react
 !---------------------------------------------------------------------
