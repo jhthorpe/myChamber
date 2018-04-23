@@ -1,3 +1,10 @@
 GAS PHASE KINETICS DATA
         	Rct1            Rct2    	Rct3		Prd1		Prd2		Prd3            a * exp(b*T/c) * exp(d/T) * (e*T/f)^g * [h]
+		O3P	+	O2	+	M	>	O3	+	M	+	X	:	a= 6.0E-34  b= 0.0  c= 1.0  d= 0.0  e= 1.0 f= 300E0 g= -2.6 h= 'N2' 
+		O1D	+	O2	+	M	>	O3	+	M	+	X	:	a= 6.0E-34  b= 0.0  c= 1.0  d= 0.0  e= 1.0 f= 300E0 g= -2.6 h= 'N2' 
+		O3P	+	O3	+	X	>	O2	+	O2	+	X	:	a= 8.0E-12  b= 0.0  c= 1.0  d= -2060  e= 0.0  f= 1.0  g= 0.0 h= 'X'
+		O1D	+	O3	+	X	>	O2	+	O2	+	X	:	a= 8.0E-12  b= 0.0  c= 1.0  d= -2060  e= 0.0  f= 1.0  g= 0.0 h= 'X'
+		O1D	+	O2	+	X	>	O3P	+	O2	+	X	:	a= 3.2E-11  b= 0.0  c= 1.0  d= 67  e= 0.0  f= 1.0  g= 0.0  h= 'X'
+		O1D	+	O3	+	X	>	O2	+	O3P	+	O3P	:	a= 1.2E-10  b= 0.0  c= 1.0  d= 0.0  e= 0.0  f= 1.0  g= 0.0  h= 'X'
+		O1D	+	O3	+	X	>	O2	+	O2	+	X	:	a= 1.2E-10  b= 0.0  c= 1.0  d= 0.0  e= 0.0  f= 1.0  g= 0.0  h= 'X'
 		HO	+	NO2	+	M 	>	HONO2	+	M	+	X	:	a= 3.2E-30  b= 0.0  c= 1.0  d= 0.0  e= 1.0  f= 300.0  g= -4.5  h= 'N2'  	
