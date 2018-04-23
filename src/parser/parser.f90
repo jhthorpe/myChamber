@@ -161,7 +161,7 @@ PROGRAM parser
     IMPLICIT NONE
     REAL(KIND=8), INTENT(in) :: hr,mn,sc
     REAL(KIND=8) :: time
-    time = hr*360.0D0
+    time = hr*3600.0D0
     time = mn*60.0D0 + time
     time = sc + time
     getTLEN = time
