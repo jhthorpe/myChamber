@@ -10,3 +10,4 @@ PHOTOLYSIS REACTIONS
 	HONO2	+	hv	+	X	>	HONO	+	O3P	+	X
 	NO2	+	hv	+	X	>	NO	+	O3P	+	X
 	NO3	+	hv	+	X	>	NO2	+	O3P	+	X
+	H2O	+	hv	+	X	>	HO	+	O3P	+	X	
